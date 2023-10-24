@@ -1,7 +1,5 @@
 package com.sharafindustries.status.controlpage.controller;
 
-import java.util.Base64;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.sharafindustries.status.controlpage.client.StatusClient;
-
-import feign.FeignException.FeignClientException;
 
 @Controller
 public class ViewController
@@ -52,28 +47,28 @@ public class ViewController
 		}
 	}
 	
-	@GetMapping("/login")
-	public String getLoginPage()
-	{
-		return "login";
-	}
-	
-	@PostMapping("/login")
-	public String doLogin(@RequestParam("email") String email, @RequestParam("password") String password, Model model)
-	{
-		String credentialString = email + ":" + password;
-		String authorizationHeader = "Basic " + Base64.getEncoder().encodeToString(credentialString.getBytes());
-		try
-		{
-			statusClient.authenticateUser(authorizationHeader);
-			return "redirect:/dashboard";
-		}
-		catch (FeignClientException e)
-		{
-			model.addAttribute("error", "Invalid credentials");
-            return "login";
-		}
-	}
+//	@GetMapping("/login")
+//	public String getLoginPage()
+//	{
+//		return "login";
+//	}
+//	
+//	@PostMapping("/login")
+//	public String doLogin(@RequestParam("email") String email, @RequestParam("password") String password, Model model)
+//	{
+//		String credentialString = email + ":" + password;
+//		String authorizationHeader = "Basic " + Base64.getEncoder().encodeToString(credentialString.getBytes());
+//		try
+//		{
+//			statusClient.authenticateUser(authorizationHeader);
+//			return "redirect:/dashboard";
+//		}
+//		catch (FeignClientException e)
+//		{
+//			model.addAttribute("error", "Invalid credentials");
+//            return "login";
+//		}
+//	}
 	
 	@GetMapping("/dashboard")
 	public String toDashboard()
