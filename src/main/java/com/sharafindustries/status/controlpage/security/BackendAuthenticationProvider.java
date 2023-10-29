@@ -23,17 +23,13 @@ public class BackendAuthenticationProvider implements AuthenticationProvider
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException
 	{
-		System.out.println("in authentication provider");
 		if (authentication == null)
 		{
-			System.out.println("authentication is null");
 			return null;
 		}
 		String username = authentication.getName();
 		String password = authentication.getCredentials().toString();
-		System.out.println("CREDENTIALS " + username + " " + password);
 		String authHeader = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
-		System.out.println("AUTH HEADER " + authHeader);
 		try
 		{
 			statusClient.authenticateUser(authHeader);

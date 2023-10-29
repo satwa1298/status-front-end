@@ -57,33 +57,9 @@ public class ViewController
 		}
 	}
 	
-//	@GetMapping("/login")
-//	public String getLoginPage()
-//	{
-//		return "login";
-//	}
-//	
-//	@PostMapping("/login")
-//	public String doLogin(@RequestParam("email") String email, @RequestParam("password") String password, Model model)
-//	{
-//		String credentialString = email + ":" + password;
-//		String authorizationHeader = "Basic " + Base64.getEncoder().encodeToString(credentialString.getBytes());
-//		try
-//		{
-//			statusClient.authenticateUser(authorizationHeader);
-//			return "redirect:/dashboard";
-//		}
-//		catch (FeignClientException e)
-//		{
-//			model.addAttribute("error", "Invalid credentials");
-//            return "login";
-//		}
-//	}
-	
 	@GetMapping(value = {"/", "/dashboard"})
 	public String toDashboard(Model model, @RequestHeader("Authorization") String authorizationHeader, Principal principal)
 	{
-		System.out.println("***** IN DASHBOARD");
 		//TODO add error handling
         List<UserStatusInfo> customStatuses = statusClient.getCustomStatuses(authorizationHeader);
         model.addAttribute("customStatuses", customStatuses);
@@ -116,7 +92,6 @@ public class ViewController
 			@RequestParam("message") String message)
 	{
 		statusClient.createCustomStatus(authorizationHeader, statusName, availability, message);
-		System.out.println("**** END CREATE CUSTOM STATUS");
 		return "redirect:/dashboard";
 	}
 	
@@ -133,7 +108,6 @@ public class ViewController
 		try
 		{
 			statusClient.setCurrentStatus(authorizationHeader, statusName);
-			System.out.println("**** END SET STATUS");
 			return "redirect:/dashboard";
 		}
 		catch (FeignClientException exception) 
