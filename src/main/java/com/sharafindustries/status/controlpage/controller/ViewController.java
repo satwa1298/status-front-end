@@ -1,23 +1,24 @@
 package com.sharafindustries.status.controlpage.controller;
 
-import java.security.Principal;
-import java.util.Base64;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.sharafindustries.status.controlpage.client.StatusClient;
 import com.sharafindustries.status.controlpage.model.UserStatusInfo;
@@ -29,6 +30,9 @@ public class ViewController
 {
 	@Autowired
 	private StatusClient statusClient;
+	
+	@Autowired
+    private OAuth2AuthorizedClientService authorizedClientService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ViewController.class);
 	
@@ -63,17 +67,23 @@ public class ViewController
 	}
 	
 	@GetMapping(value = {"/", "/dashboard"})
-	public String toDashboard(Model model, Principal principal)
+	public String toDashboard(Model model, @AuthenticationPrincipal OAuth2User user)
 	{
+		String idToken = getIdToken(user);
+		//get attributes
+//		user.getAttributes();
+		
+		//ResponseEntity<String> response = statusClient.testGoogleToken(idToken);
+		
 		//TODO add error handling
-//        List<UserStatusInfo> customStatuses = statusClient.getCustomStatuses(authorizationHeader);
-//        model.addAttribute("customStatuses", customStatuses);
+        List<UserStatusInfo> customStatuses = statusClient.getCustomStatuses(idToken);
+        model.addAttribute("customStatuses", customStatuses);
 //
-//        UserStatusInfo currentStatus = statusClient.getCurrentStatus(authorizationHeader, principal.getName());
-//        model.addAttribute("currentStatus", currentStatus);
+        UserStatusInfo currentStatus = statusClient.getCurrentStatus(idToken, user.getAttribute("email"));
+        model.addAttribute("currentStatus", currentStatus);
 //
-//        List<String> friendList = statusClient.getFriendList(authorizationHeader);
-//        model.addAttribute("friends", friendList);
+        List<String> friendList = statusClient.getFriendList(idToken);
+        model.addAttribute("friends", friendList);
 		return "dashboard";
 	}
 	
@@ -129,11 +139,16 @@ public class ViewController
 		}
 	}
 	
-//	@PostMapping("/auth-receiver")
-//	public String receiveAuth(HttpServletRequest request)
-//	{
-//		logger.info("received auth");
-//		request.
-//	}
+	private String getIdToken(OAuth2User user)
+	{
+		OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+
+		// get access token (will need to inject OAuth2AuthorizedClientService)
+		// OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(oauthToken.getAuthorizedClientRegistrationId(), oauthToken.getName());
+		// String accessToken = client.getAccessToken().getTokenValue();
+		
+		String idToken = ((DefaultOidcUser) oauthToken.getPrincipal()).getIdToken().getTokenValue();
+		return idToken;
+	}
 	
 }

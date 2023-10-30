@@ -45,5 +45,8 @@ public interface StatusClient
 	
 	@PostMapping("/set-status")
 	String setCurrentStatus(@RequestHeader("Authorization") String authorizationHeader, @RequestParam("statusName") String statusName);
+	
+	@PostMapping("/google-token-test")
+	ResponseEntity<String> testGoogleToken(String token);
 
 }
