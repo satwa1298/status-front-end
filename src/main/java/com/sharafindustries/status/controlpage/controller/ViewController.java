@@ -4,7 +4,10 @@ import java.security.Principal;
 import java.util.Base64;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +29,8 @@ public class ViewController
 {
 	@Autowired
 	private StatusClient statusClient;
+	
+	private static final Logger logger = LoggerFactory.getLogger(ViewController.class);
 	
 	@GetMapping("/register")
 	public String toRegisterPage()
@@ -58,17 +63,17 @@ public class ViewController
 	}
 	
 	@GetMapping(value = {"/", "/dashboard"})
-	public String toDashboard(Model model, @RequestHeader("Authorization") String authorizationHeader, Principal principal)
+	public String toDashboard(Model model, Principal principal)
 	{
 		//TODO add error handling
-        List<UserStatusInfo> customStatuses = statusClient.getCustomStatuses(authorizationHeader);
-        model.addAttribute("customStatuses", customStatuses);
-
-        UserStatusInfo currentStatus = statusClient.getCurrentStatus(authorizationHeader, principal.getName());
-        model.addAttribute("currentStatus", currentStatus);
-
-        List<String> friendList = statusClient.getFriendList(authorizationHeader);
-        model.addAttribute("friends", friendList);
+//        List<UserStatusInfo> customStatuses = statusClient.getCustomStatuses(authorizationHeader);
+//        model.addAttribute("customStatuses", customStatuses);
+//
+//        UserStatusInfo currentStatus = statusClient.getCurrentStatus(authorizationHeader, principal.getName());
+//        model.addAttribute("currentStatus", currentStatus);
+//
+//        List<String> friendList = statusClient.getFriendList(authorizationHeader);
+//        model.addAttribute("friends", friendList);
 		return "dashboard";
 	}
 	
@@ -123,5 +128,12 @@ public class ViewController
 			return "dashboard";
 		}
 	}
+	
+//	@PostMapping("/auth-receiver")
+//	public String receiveAuth(HttpServletRequest request)
+//	{
+//		logger.info("received auth");
+//		request.
+//	}
 	
 }
