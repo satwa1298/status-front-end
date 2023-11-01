@@ -3,14 +3,8 @@
 
 <head>
 	<title>Dashboard</title>
-	<style>
-		/* Add this CSS to align links to the top-right corner */
-		.top-right-links {
-			position: absolute;
-			top: 10px;
-			right: 10px;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="css/dashboard.css">
+
 </head>
 
 <body>
@@ -19,10 +13,11 @@
 		<a href="/view-passphrase">View Passphrase</a>
 		<!-- For logout, we use a form to send a POST request -->
 		<form th:action="@{/logout}" method="post" style="display: inline;">
-			<button type="submit">Logout</button>
+			<button id="logoutButton" type="submit">Logout</button>
 		</form>
 	</div>
 	
+	<div class=""container"">
 	<h1>Dashboard</h1>
 
 	<h2>Your Current Status</h2>
@@ -108,6 +103,7 @@
 	<h2>About</h2>
 	<p>You can view your current status, set your current status, create and delete custom statuses, and add or remove friends. anyone you add as a friend will be able to see your status</p>
 	<p>When creating a new status, you cannot name it "Available"", "Away", or "Busy". Additionally, duplicate names are not allowed</p>
+	</div>
 
 </body>
 
