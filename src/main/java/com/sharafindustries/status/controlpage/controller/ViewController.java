@@ -105,7 +105,7 @@ public class ViewController
 			String authorizationHeader = createAuthorizationHeader();
 			Map<String, String> body = new HashMap<>();
 			body.put("statusName", statusName);
-			statusClient.deleteCustomStatus(authorizationHeader, body);
+			statusClient.setCurrentStatus(authorizationHeader, body);
 			return "redirect:/dashboard";
 		}
 		catch (FeignClientException exception) 
