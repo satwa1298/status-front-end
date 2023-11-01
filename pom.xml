@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.sharafindustries</groupId>
 	<artifactId>status.controlpage</artifactId>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>status.controlpage</name>
 	<description>control page for status app</description>
 	<properties>
