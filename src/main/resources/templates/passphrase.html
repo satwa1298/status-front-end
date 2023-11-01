@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Passphrase Page</title>
+</head>
+<body>
+
+    <h1>Your Passphrase</h1>
+    
+    <!-- Displaying the passphrase from the model -->
+    <p>Your passphrase is: <span th:text="${passphrase}"></span></p>
+    
+    <!-- Link to return to the dashboard -->
+    <a href="/dashboard">Return to Dashboard</a>
+
+</body>
+</html>
