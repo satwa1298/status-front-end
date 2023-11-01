@@ -1,0 +1,7 @@
+server.port=<port-number>
+
+spring.security.oauth2.client.registration.google.client-id=<client-id>
+spring.security.oauth2.client.registration.google.client-secret=<client-secret>
+
+feign.status-client.url=<backend-url>
+
